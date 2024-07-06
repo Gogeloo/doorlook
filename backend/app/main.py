@@ -21,13 +21,12 @@ from app.api import router
 from .settings import settings
 
 api_description = """
-## Computer Craft - ccTweaked
-- [ccTweaked](https://tweaked.cc/)
+## Inspect employers
 
 ## API Documentation:
-- [Stoplight](https://efficiency-6.soulant.com/api/docs)
-- [Swagger UI](https://efficiency-6.soulant.com/api/swagger)
-- [ReDoc](https://efficiency-6.soulant.com/api/redoc)
+- [Stoplight](https://doorlook.soulant.com/api/docs)
+- [Swagger UI](https://doorlook.soulant.com/api/swagger)
+- [ReDoc](https://doorlook.soulant.com/api/redoc)
 """
 
 
