@@ -1,20 +1,14 @@
 from contextlib import asynccontextmanager
 from typing import Any, AsyncGenerator, Iterator
 
-# from app.frontend.frontend import frontend_router
-# from app.utils.robots import robots_router
-# from app.utils.sitemap import sitemap_router
-# from app.utils.favicon import favicon_router
-# from .settings import settings
 import anyio
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security.api_key import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from starlette.templating import _TemplateResponse
 
 from app.api import router
@@ -65,7 +59,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # templates = Jinja2Templates(directory="app/frontend/templates")
 
 
@@ -89,6 +83,23 @@ async def shutdown_event() -> None:
 #         status_code=exc.status_code,
 #         content={"message": str(exc.detail)},
 #     )
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("app/static/favicon.ico")
+
+
+# Serve the sitemap
+@app.get("/sitemap.xml", include_in_schema=False)
+async def sitemap():
+    return FileResponse("app/static/sitemap.xml")
+
+
+# Serve the robots.txt
+@app.get("/robots.txt", include_in_schema=False)
+async def robots():
+    return FileResponse("app/static/robots.txt")
 
 
 @app.get("/api/openapi.json", tags=["Documentation Formats"], include_in_schema=False)
@@ -147,11 +158,7 @@ async def stoplight() -> HTMLResponse:
 
 
 # app.include_router(api_router, prefix="/api/v1")
-# app.include_router(frontend_router, tags=["Frontend"])
-# app.include_router(robots_router)
-# app.include_router(sitemap_router)
-# app.include_router(favicon_router)
+
 
 if __name__ == "__main__":
-    # uvicorn.run(app, loop="uvloop")
     pass
