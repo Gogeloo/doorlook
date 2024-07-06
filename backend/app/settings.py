@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     title: str = "FastAPI"
+    open_api_key: str = "OPEN_API_KEY"
 
     model_config = SettingsConfigDict(
         env_file=".env",

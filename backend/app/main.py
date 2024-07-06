@@ -16,7 +16,7 @@ from fastapi.security.api_key import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app.api import router
+from app.api.router import api_router
 
 from .settings import settings
 
@@ -145,7 +145,7 @@ async def stoplight() -> HTMLResponse:
     )
 
 
-# app.include_router(api_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/api/v1")
 # app.include_router(frontend_router, tags=["Frontend"])
 # app.include_router(robots_router)
 # app.include_router(sitemap_router)
