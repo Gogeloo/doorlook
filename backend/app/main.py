@@ -64,8 +64,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
-templates = Jinja2Templates(directory="app/frontend/templates")
+# app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
+# templates = Jinja2Templates(directory="app/frontend/templates")
 
 
 @app.on_event("startup")
@@ -80,14 +80,14 @@ async def shutdown_event():
     pass
 
 
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request: Request, exc: HTTPException):
-    if exc.status_code == 404 and not request.url.path.startswith("/api"):
-        return templates.TemplateResponse("404.html", {"request": request})
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={"message": str(exc.detail)},
-    )
+# @app.exception_handler(HTTPException)
+# async def http_exception_handler(request: Request, exc: HTTPException):
+#     if exc.status_code == 404 and not request.url.path.startswith("/api"):
+#         return templates.TemplateResponse("404.html", {"request": request})
+#     return JSONResponse(
+#         status_code=exc.status_code,
+#         content={"message": str(exc.detail)},
+#     )
 
 
 @app.get("/api/openapi.json", tags=["Documentation Formats"], include_in_schema=False)
