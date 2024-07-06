@@ -1,20 +1,15 @@
 from contextlib import asynccontextmanager
 from typing import Any, AsyncGenerator, Iterator
 
-# from app.frontend.frontend import frontend_router
-# from app.utils.robots import robots_router
-# from app.utils.sitemap import sitemap_router
-# from app.utils.favicon import favicon_router
-# from .settings import settings
 import anyio
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security.api_key import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from starlette.templating import _TemplateResponse
 
 from app.api.router import api_router
 
@@ -64,24 +59,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # templates = Jinja2Templates(directory="app/frontend/templates")
 
 
 @app.on_event("startup")
-async def startup_event():
+async def startup_event() -> None:
     """Startup event for the application."""
     pass
 
 
 @app.on_event("shutdown")
-async def shutdown_event():
+async def shutdown_event() -> None:
     """Shutdown event for the application."""
     pass
 
 
 # @app.exception_handler(HTTPException)
-# async def http_exception_handler(request: Request, exc: HTTPException):
+# async def http_exception_handler(request: Request, exc: HTTPException) -> _TemplateResponse | JSONResponse:
 #     if exc.status_code == 404 and not request.url.path.startswith("/api"):
 #         return templates.TemplateResponse("404.html", {"request": request})
 #     return JSONResponse(
@@ -90,18 +85,35 @@ async def shutdown_event():
 #     )
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("app/static/favicon.ico")
+
+
+# Serve the sitemap
+@app.get("/sitemap.xml", include_in_schema=False)
+async def sitemap():
+    return FileResponse("app/static/sitemap.xml")
+
+
+# Serve the robots.txt
+@app.get("/robots.txt", include_in_schema=False)
+async def robots():
+    return FileResponse("app/static/robots.txt")
+
+
 @app.get("/api/openapi.json", tags=["Documentation Formats"], include_in_schema=False)
-async def get_openapi():
+async def get_openapi() -> JSONResponse:
     return JSONResponse(app.openapi())
 
 
 @app.get("/api", include_in_schema=False)
-async def api_root():
+async def api_root() -> RedirectResponse:
     return RedirectResponse(url="/api/docs")
 
 
 @app.get("/", include_in_schema=False)
-async def index():
+async def index() -> RedirectResponse:
     return RedirectResponse(url="/api/docs")
 
 
@@ -145,12 +157,9 @@ async def stoplight() -> HTMLResponse:
     )
 
 
+
 app.include_router(api_router, prefix="/api/v1")
-# app.include_router(frontend_router, tags=["Frontend"])
-# app.include_router(robots_router)
-# app.include_router(sitemap_router)
-# app.include_router(favicon_router)
+
 
 if __name__ == "__main__":
-    # uvicorn.run(app, loop="uvloop")
     pass
