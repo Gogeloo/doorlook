@@ -81,7 +81,6 @@ async def shutdown_event() -> None:
     pass
 
 
-
 # @app.exception_handler(HTTPException)
 # async def http_exception_handler(request: Request, exc: HTTPException) -> _TemplateResponse | JSONResponse:
 #     if exc.status_code == 404 and not request.url.path.startswith("/api"):
