@@ -23,7 +23,6 @@ Doorlook is a project designed to analyze companies and how they treat their emp
 - Evaluate employee treatment and satisfaction.
 - Web scraping to gather opinions from various sources.
 - AI tools for opinion analysis and sentiment detection.
-- User-friendly interface for data visualization.
 - RESTful API for backend services.
 
 ## Project Structure
