@@ -11,7 +11,7 @@ from fastapi.security.api_key import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import _TemplateResponse
 
-from app.api import router
+from app.api.router import api_router
 
 from .settings import settings
 
@@ -157,7 +157,8 @@ async def stoplight() -> HTMLResponse:
     )
 
 
-# app.include_router(api_router, prefix="/api/v1")
+
+app.include_router(api_router, prefix="/api/v1")
 
 
 if __name__ == "__main__":
