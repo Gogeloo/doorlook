@@ -1,6 +1,6 @@
 # Doorlook
 
-Doorlook is a monorepo project designed to analyze companies and how they treat their employees. It consists of a backend built with FastAPI and a frontend built with React. The project utilizes web scraping and various AI tools to gather and analyze opinions about companies.
+Doorlook is a project designed to analyze companies and how they treat their employees. It consists of a backend built with FastAPI and a frontend built with React. The project utilizes web scraping and various AI tools to gather and analyze opinions about companies.
 
 ## Table of Contents
 
