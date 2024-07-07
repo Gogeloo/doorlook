@@ -11,7 +11,7 @@ def ask_openai_for_company_opinion(
     company: str,
     location: str | None = None,
 ):
-    client = OpenAI(api_key=settings.open_api_key)
+    client = OpenAI(api_key=settings.open_ai_api_key)
 
     completeions = client.chat.completions.create(
         model="gpt-4o",
