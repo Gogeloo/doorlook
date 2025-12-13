@@ -1,30 +1,29 @@
-from fastapi import APIRouter
-from openai import OpenAI
+from fastapi import APIRouter, HTTPException, status
 
-from app.settings import settings
+from app.api.schemas.ask_openai import (
+    CompanyInsightRequest,
+    CompanyInsightResponse,
+)
+from app.integrations import (
+    OpenAIIntegrationError,
+    generate_company_insight,
+)
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.post(
+    "/",
+    response_model=CompanyInsightResponse,
+    summary="Get a structured opinion about a company using OpenAI.",
+)
 def ask_openai_for_company_opinion(
-    company: str,
-    location: str | None = None,
-):
-    client = OpenAI(api_key=settings.open_ai_api_key)
-
-    completeions = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a specialist job seeker, and your task is to help a friend with information about the job that they request.",
-            },
-            {
-                "role": "user",
-                "content": f"Company name: {company}, Location: {location}",
-            },
-        ],
-    )
-
-    return completeions
+    payload: CompanyInsightRequest,
+) -> CompanyInsightResponse:
+    try:
+        return generate_company_insight(payload)
+    except OpenAIIntegrationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=str(exc),
+        ) from exc
